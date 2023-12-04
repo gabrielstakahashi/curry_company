@@ -176,7 +176,7 @@ def clean_code(df1):
 #-----------------------------------
 #import dataset
 #-----------------------------------
-df = pd.read_csv('ciclo_6\\dataset\\train.csv')
+df = pd.read_csv('dataset/train.csv')
 
 #-----------------------------------
 #cleaning code
