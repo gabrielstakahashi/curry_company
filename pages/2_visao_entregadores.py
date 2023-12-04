@@ -148,7 +148,6 @@ df1 = df1.loc[linhas_selecionadas, :]
 #           layout no streamlit
 # ========================================
 
-st.markdown('Visão Gerencial')
 
 with st.container():
     st.title( 'Overall Metrics' )
