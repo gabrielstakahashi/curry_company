@@ -232,75 +232,72 @@ df1 = df1.loc[linhas_selecionadas, :]
 #           layout no streamlit
 # ========================================
 
-tab1, tab2, tab3 = st.tabs( ['Visão Gerencial', '_', '_'] )
+with st.container():
+    st.markdown('## Overal Metrics')
 
-with tab1:
-    with st.container():
-        st.markdown('## Overal Metrics')
+    col1, col2, col3, col4, col5, col6 = st.columns( 6 )
 
-        col1, col2, col3, col4, col5, col6 = st.columns( 6 )
+    with col1:
+        #entregadores únicos
+        delivery_unique = df1['Delivery_person_ID'].nunique()
+        col1.metric( 'Entregadores únicos', delivery_unique)
 
-        with col1:
-            #entregadores únicos
-            delivery_unique = df1['Delivery_person_ID'].nunique()
-            col1.metric( 'Entregadores únicos', delivery_unique)
+    with col2:
+        #distância média
+        avg_distance = distance(df1, fig=False)
+        col2.metric( ' A distância média das entregas', avg_distance)           
 
-        with col2:
-            #distância média
-            avg_distance = distance(df1, fig=False)
-            col2.metric( ' A distância média das entregas', avg_distance)           
+    with col3:
+        df_aux = avg_std_time_delivery(df1, 'Yes', 'avg_time')
+        col3.metric( 'Tempo médio com festival', df_aux)
 
-        with col3:
-            df_aux = avg_std_time_delivery(df1, 'Yes', 'avg_time')
-            col3.metric( 'Tempo médio com festival', df_aux)
+    with col4:
+        df_aux = avg_std_time_delivery(df1, 'Yes', 'std_time')
+        col4.metric( 'Desvio padrão com festival', df_aux)
 
-        with col4:
-            df_aux = avg_std_time_delivery(df1, 'Yes', 'std_time')
-            col4.metric( 'Desvio padrão com festival', df_aux)
+    with col5:
+        df_aux = avg_std_time_delivery(df1, 'No', 'avg_time')
+        col5.metric( 'Tempo médio sem festival', df_aux)
 
-        with col5:
-            df_aux = avg_std_time_delivery(df1, 'No', 'avg_time')
-            col5.metric( 'Tempo médio sem festival', df_aux)
+    with col6:
+        df_aux = avg_std_time_delivery(df1, 'No', 'std_time')
+        col6.metric( 'Desvio padrão sem festival', df_aux)
 
-        with col6:
-            df_aux = avg_std_time_delivery(df1, 'No', 'std_time')
-            col6.metric( 'Desvio padrão sem festival', df_aux)
+    
+with st.container():
+    df1 = df1.loc[df1['City'] != 'NaN']
+    st.markdown( """---""")
 
+    col1, col2 = st.columns( 2 )
+
+    with col1:
+        fig = avg_std_time_graph( df1 )
+        st.plotly_chart( fig )
+
+    with col2:
+
+        df_aux = round(df1.loc[:, ['Time_taken(min)', 'City','Type_of_order']]
+                .groupby(['City', 'Type_of_order'])
+                .agg({ 'Time_taken(min)' : ['mean', 'std'] })
+                ,2)
         
-    with st.container():
-        df1 = df1.loc[df1['City'] != 'NaN']
-        st.markdown( """---""")
+        df_aux.columns = ['avg_time', 'std_time']
+        df_aux = df_aux.reset_index()
 
-        col1, col2 = st.columns( 2 )
+        st.dataframe(df_aux)
 
-        with col1:
-            fig = avg_std_time_graph( df1 )
-            st.plotly_chart( fig )
+    
+with st.container():
+    st.markdown('## Distribuiçao do tempo')
 
-        with col2:
- 
-            df_aux = round(df1.loc[:, ['Time_taken(min)', 'City','Type_of_order']]
-                    .groupby(['City', 'Type_of_order'])
-                    .agg({ 'Time_taken(min)' : ['mean', 'std'] })
-                    ,2)
-            
-            df_aux.columns = ['avg_time', 'std_time']
-            df_aux = df_aux.reset_index()
+    col1, col2 = st.columns( 2 )
 
-            st.dataframe(df_aux)
+    with col1:
+        fig = distance( df1, fig=True )
+        st.plotly_chart( fig )
 
-        
-    with st.container():
-        st.markdown('## Distribuiçao do tempo')
-
-        col1, col2 = st.columns( 2 )
-
-        with col1:
-            fig = distance( df1, fig=True )
-            st.plotly_chart( fig )
-
-                       
-        with col2:
-            fig = avg_std_time_on_traffic ( df1 )
-            st.plotly_chart( fig )
+                   
+    with col2:
+        fig = avg_std_time_on_traffic ( df1 )
+        st.plotly_chart( fig )
         
