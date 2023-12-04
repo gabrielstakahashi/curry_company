@@ -233,7 +233,7 @@ df1 = df1.loc[linhas_selecionadas, :]
 # ========================================
 
 with st.container():
-    st.markdown('## Overal Metrics')
+    st.markdown('## Overall Metrics')
 
     col1, col2, col3, col4, col5, col6 = st.columns( 6 )
 
