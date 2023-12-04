@@ -148,7 +148,7 @@ df1 = df1.loc[linhas_selecionadas, :]
 #           layout no streamlit
 # ========================================
 
-tab1 = st.tabs( 'Visão Gerencial' )
+tab1 = st.tab( 'Visão Gerencial' )
 
 with tab1:
     with st.container():
