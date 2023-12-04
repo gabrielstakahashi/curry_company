@@ -192,8 +192,8 @@ st.header('Marketplace - Visão Restaurantes')
 
 #logo
 # image_path = 'C:\\Users\\gabri\\OneDrive\\Documents\\repos\\ftc\\ciclo_6\\'
-# image = Image.open( image_path + 'logo.jpg')
-# st.sidebar.image( image, width=280 )
+image = Image.open('logo.jpg')
+st.sidebar.image( image, width=280 )
 
 #st.sidebar.image
 
