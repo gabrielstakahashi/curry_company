@@ -8,6 +8,7 @@ import folium
 from PIL import Image
 from streamlit_folium import folium_static
 from pandas.core.reshape import concat
+import datetime
 
 st.set_page_config(page_title='Visão Entregadores',page_icon='🛵', layout='wide')
 
@@ -119,9 +120,9 @@ st.sidebar.markdown( """---""")
 st.sidebar.markdown( '## Selecione uma data limite')
 
 date_slider = st.sidebar.slider('Até qual valor?', 
-                  value = pd.datetime(2022, 4, 13), 
-                  min_value = pd.datetime(2022, 2, 11),
-                  max_value = pd.datetime(2022, 4, 6),
+                  value = datetime.datetime(2022, 4, 13), 
+                  min_value = datetime.datetime(2022, 2, 11),
+                  max_value = datetime.datetime(2022, 4, 6),
                   format='DD-MM-YYYY')
 
 st.sidebar.markdown( """---""")
