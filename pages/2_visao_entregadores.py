@@ -148,101 +148,100 @@ df1 = df1.loc[linhas_selecionadas, :]
 #           layout no streamlit
 # ========================================
 
-tab1 = st.tab( 'Visão Gerencial' )
+st.markdown('Visão Gerencial')
 
-with tab1:
-    with st.container():
-        st.title( 'Overall Metrics' )
-        col1, col2, col3, col4 = st.columns( 4, gap='large')
-        #idades:
-        with col1:
-            #A maior idade dos entregadores
-            maior_idade = df1['Delivery_person_Age'].max()
-            col1.metric('Maior idade', maior_idade)
+with st.container():
+    st.title( 'Overall Metrics' )
+    col1, col2, col3, col4 = st.columns( 4, gap='large')
+    #idades:
+    with col1:
+        #A maior idade dos entregadores
+        maior_idade = df1['Delivery_person_Age'].max()
+        col1.metric('Maior idade', maior_idade)
 
-        with col2:
-            #A menor idade dos entregadores
-            menor_idade = df1['Delivery_person_Age'].min()
-            col2.metric('Menor idade', menor_idade)
-        
-        #veículos:
-        with col3:
-            #A melhor condição de veículo
-            melhor_condicao = df1['Vehicle_condition'].max()
-            col3.metric('Melhor condição', melhor_condicao)
-
-        with col4:
-            #A pior condição de veículo
-            pior_condicao = df1['Vehicle_condition'].min()
-            col4.metric('Pior condição', pior_condicao)
+    with col2:
+        #A menor idade dos entregadores
+        menor_idade = df1['Delivery_person_Age'].min()
+        col2.metric('Menor idade', menor_idade)
     
-    with st.container():
-        st.markdown("""---""")
+    #veículos:
+    with col3:
+        #A melhor condição de veículo
+        melhor_condicao = df1['Vehicle_condition'].max()
+        col3.metric('Melhor condição', melhor_condicao)
 
-        st.header('Avaliações')
+    with col4:
+        #A pior condição de veículo
+        pior_condicao = df1['Vehicle_condition'].min()
+        col4.metric('Pior condição', pior_condicao)
 
-        col1, col2 = st.columns( 2 )
-        with col1:
-            st.markdown( '##### Avaliações média por entregador')
-            avaliacao_media = round(df1.loc[:, ['Delivery_person_ID', 'Delivery_person_Ratings']]
-                                    .groupby('Delivery_person_ID')
-                                    .mean()
-                                    .sort_values('Delivery_person_Ratings', ascending=False)
-                                    .reset_index(),
-                                    2)
-            st.dataframe(avaliacao_media)
+with st.container():
+    st.markdown("""---""")
 
-        with col2:
-            #trânsito:
-            st.markdown( '##### Avaliação média por trânsito')
-            df_avg_std_transito = (df1.loc[:, ['Delivery_person_Ratings','Road_traffic_density']]
-                                  .groupby('Road_traffic_density')
-                                  .agg( {'Delivery_person_Ratings': ['mean', 'std']} ) )
-            
-            #mudança de nome das colunas:
-            df_avg_std_transito.columns = ['delivery_mean', 'delivery_std']
+    st.header('Avaliações')
 
-            #reset do index:
-            df_avg_std_transito = df_avg_std_transito.reset_index()
+    col1, col2 = st.columns( 2 )
+    with col1:
+        st.markdown( '##### Avaliações média por entregador')
+        avaliacao_media = round(df1.loc[:, ['Delivery_person_ID', 'Delivery_person_Ratings']]
+                                .groupby('Delivery_person_ID')
+                                .mean()
+                                .sort_values('Delivery_person_Ratings', ascending=False)
+                                .reset_index(),
+                                2)
+        st.dataframe(avaliacao_media)
 
-            #mostrando o df no streamlit:
-            st.dataframe(df_avg_std_transito)
+    with col2:
+        #trânsito:
+        st.markdown( '##### Avaliação média por trânsito')
+        df_avg_std_transito = (df1.loc[:, ['Delivery_person_Ratings','Road_traffic_density']]
+                              .groupby('Road_traffic_density')
+                              .agg( {'Delivery_person_Ratings': ['mean', 'std']} ) )
+        
+        #mudança de nome das colunas:
+        df_avg_std_transito.columns = ['delivery_mean', 'delivery_std']
 
-            #clima:
-            st.markdown( '##### Avaliação por clima')
-            #o .agg (='aggregation') agrega as funções que quero realizar na mesma coluna
-            #.agg( {<coluna que recebe a operação: ['uma lista de operações a serem aplicadas na coluna' ]})
+        #reset do index:
+        df_avg_std_transito = df_avg_std_transito.reset_index()
 
-            df_avg_std_rating_weather = (df1.loc[: , ['Delivery_person_Ratings', 'Weatherconditions']]
-                                         .groupby('Weatherconditions')
-                                         .agg( {'Delivery_person_Ratings': ['mean', 'std', 'min', 'max']} ) )
-            
-            #renomeando as colunas:
-            df_avg_std_rating_weather.columns = ['delivery_mean', 'delivery_std','min','max']
+        #mostrando o df no streamlit:
+        st.dataframe(df_avg_std_transito)
 
-            #reset do index:
-            df_avg_std_rating_weather = df_avg_std_rating_weather.reset_index()
+        #clima:
+        st.markdown( '##### Avaliação por clima')
+        #o .agg (='aggregation') agrega as funções que quero realizar na mesma coluna
+        #.agg( {<coluna que recebe a operação: ['uma lista de operações a serem aplicadas na coluna' ]})
 
-            #mostrando o df no streamlit:
-            st.dataframe(df_avg_std_rating_weather)
+        df_avg_std_rating_weather = (df1.loc[: , ['Delivery_person_Ratings', 'Weatherconditions']]
+                                     .groupby('Weatherconditions')
+                                     .agg( {'Delivery_person_Ratings': ['mean', 'std', 'min', 'max']} ) )
+        
+        #renomeando as colunas:
+        df_avg_std_rating_weather.columns = ['delivery_mean', 'delivery_std','min','max']
 
+        #reset do index:
+        df_avg_std_rating_weather = df_avg_std_rating_weather.reset_index()
 
-    with st.container():
-        st.markdown("""---""")
-        st.header('Velocidade de entrega')
-
-        col1, col2 = st.columns( 2 )
-
-        with col1:
-            st.markdown('##### Entregadores mais rápidos')
-            df3 = top_delivers( df1, top_asc=True )
-            st.dataframe( df3 )
+        #mostrando o df no streamlit:
+        st.dataframe(df_avg_std_rating_weather)
 
 
-        with col2:
-            st.markdown('##### Entregadores mais lentos')
-            df3 = top_delivers( df1, top_asc=False )
-            st.dataframe( df3 )
+with st.container():
+    st.markdown("""---""")
+    st.header('Velocidade de entrega')
+
+    col1, col2 = st.columns( 2 )
+
+    with col1:
+        st.markdown('##### Entregadores mais rápidos')
+        df3 = top_delivers( df1, top_asc=True )
+        st.dataframe( df3 )
+
+
+    with col2:
+        st.markdown('##### Entregadores mais lentos')
+        df3 = top_delivers( df1, top_asc=False )
+        st.dataframe( df3 )
 
             
 
